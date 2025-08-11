@@ -1,0 +1,6 @@
+[submodule "cxx_dependencies/logless"]
+	path = cxx_dependency/logless
+	url = git@github.com:therooftopprinz/logless.git
+[submodule "cxx_dependencies/bfc"]
+	path = cxx_dependency/bfc
+	url = git@github.com:therooftopprinz/bfc.git

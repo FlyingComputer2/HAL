@@ -1,0 +1,52 @@
+#!/bin/bash
+
+function build_dependency()
+{
+    local dep_path=$1
+    local build_dir=$2
+    local build_type=$3
+    local verbose=$4
+    local install=$5
+
+    echo "build_dependency $dep_path $build_dir $build_type $verbose $install"
+
+    pushd .
+    mkdir -p .buildeps/$build_dir
+    cd .buildeps/$build_dir
+    cmake ../../$dep_path \
+        -DCMAKE_INSTALL_PREFIX=../../.install \
+        -DCMAKE_BUILD_TYPE="$build_type" \
+        -DCMAKE_VERBOSE_MAKEFILE="$verbose"
+    make -j$(nproc) install
+    popd
+}
+
+BUILD_TYPE="Release"
+VERBOSE_MAKEFILE="false"
+
+# Parse command line arguments
+for arg in "$@"; do
+    case "$arg" in
+        --build_type=*)
+            BUILD_TYPE="${arg#*=}"
+            ;;
+        --install=*)
+            INSTALL="${arg#*=}"
+            ;;
+        --verbose|-v)
+            VERBOSE_MAKEFILE="true"
+            ;;
+        *)
+            echo "Unknown option: $arg"
+            exit 1
+            ;;
+    esac
+done
+
+git submodule update --init --recursive
+
+mkdir -p .buildeps
+mkdir -p .install
+
+build_dependency cxx_dependency/bfc          bfc        $BUILD_TYPE $VERBOSE_MAKEFILE .install
+build_dependency cxx_dependency/logless      logless    $BUILD_TYPE $VERBOSE_MAKEFILE .install
