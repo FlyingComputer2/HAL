@@ -1,7 +1,5 @@
-#ifndef __HALSIM_HAL_SERVER_HAL_HANDLER_HPP__
-#define __HALSIM_HAL_SERVER_HAL_HANDLER_HPP__
-
-#include "ipc/sync.hpp"
+#ifndef __HALSERVER_HALHANDLER_HPP__
+#define __HALSERVER_HALHANDLER_HPP__
 
 #include <memory>
 #include <cstdint>
@@ -29,10 +27,6 @@ struct II2CHandler
     virtual void xfer(const std::byte*, std::byte*, size_t) = 0;
 };
 
-// Implemented when used with dynamic linking
-extern "C" std::shared_ptr<ISPIHandler> getSPIHandler();
-extern "C" std::shared_ptr<II2CHandler> getII2CHandler();
-
 } // namespace hal
 
-#endif // __HALSIM_HAL_SERVER_HAL_HANDLER_HPP__
+#endif // __HALSERVER_HALHANDLER_HPP__
